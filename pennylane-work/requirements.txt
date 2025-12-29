@@ -1,0 +1,12 @@
+autoray==0.8.0
+cuquantum-python-cu12==25.11.1
+custatevec-cu12==1.11.0
+matplotlib==3.10.3
+numpy
+nvidia-cublas-cu12==12.9.1.4
+nvidia-cuda-runtime-cu12==12.9.79
+nvidia-cusparse-cu12==12.5.10.65
+nvidia-nvjitlink-cu12==12.9.86
+pennylane==0.43.0
+pennylane_lightning==0.43.0
+pennylane_lightning_gpu==0.43.0
