@@ -42,21 +42,74 @@ def HHL(b, hamiltonian_evolution, n, precision):
 from qrisp.operators import QubitOperator
 import numpy as np
 
-A = np.array([[3 / 8, 1 / 8], [1 / 8, 3 / 8]])
-b = np.array([1, 1])
+# A = np.array([[3 / 8, 1 / 8], [1 / 8, 3 / 8]])
+# b = np.array([1, 1])
+# H = QubitOperator.from_matrix(A).to_pauli()
+# def U(qf):
+#     # By default e^{-itH} is performed. Therefore, we set t=-pi.
+#     H.trotterization()(qf, t=-np.pi, steps=1)
+
+# @terminal_sampling
+# def main():
+#     x = HHL(tuple(b), U, 1, 3)
+#     return x
+
+# res_dict = main()
+# for k, v in res_dict.items():
+#     res_dict[k] = v**0.5
+# print(res_dict)
+
+# x = (np.linalg.inv(A) @ b) / np.linalg.norm(np.linalg.inv(A) @ b)
+# print(x)
+
+def hermitian_matrix_with_power_of_2_eigenvalues(n):
+    # Generate eigenvalues as inverse powers of 2.
+    eigenvalues = 1 / np.exp2(np.random.randint(1, 4, size=n))
+
+    # Generate a random unitary matrix.
+    Q, _ = np.linalg.qr(np.random.randn(n, n))
+
+    # Construct the Hermitian matrix.
+    A = Q @ np.diag(eigenvalues) @ Q.conj().T
+
+    return A
+
+
+# Example
+n = 3
+A = hermitian_matrix_with_power_of_2_eigenvalues(2**n)
+
 H = QubitOperator.from_matrix(A).to_pauli()
+
+
 def U(qf):
-    # By default e^{-itH} is performed. Therefore, we set t=-pi.
-    H.trotterization()(qf, t=-np.pi, steps=1)
+    H.trotterization()(qf, t=-np.pi, steps=5)
+
+
+b = np.random.randint(0, 2, size=2**n)
+
+print("Hermitian matrix A:")
+print(A)
+
+print("Eigenvalues:")
+print(np.linalg.eigvals(A))
+
+print("b:")
+print(b)
 
 @terminal_sampling
 def main():
-    x = HHL(tuple(b), U, 1, 3)
+
+    x = HHL(tuple(b), U, n, 4)
     return x
 
+
 res_dict = main()
+
 for k, v in res_dict.items():
     res_dict[k] = v**0.5
-print(res_dict)
+
+print(np.array([res_dict[key] for key in sorted(res_dict)]))
+
 x = (np.linalg.inv(A) @ b) / np.linalg.norm(np.linalg.inv(A) @ b)
 print(x)
