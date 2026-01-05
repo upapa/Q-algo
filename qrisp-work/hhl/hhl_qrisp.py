@@ -1,3 +1,7 @@
+#
+# ref: https://www.qrisp.eu/general/tutorial/HHL.html
+#
+
 from qrisp import *
 
 def fake_inversion(qf, res=None):
