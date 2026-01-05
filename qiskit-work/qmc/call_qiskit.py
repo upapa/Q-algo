@@ -12,15 +12,29 @@ from qiskit import QuantumCircuit
 from qiskit_algorithms import IterativeAmplitudeEstimation, EstimationProblem
 from qiskit.circuit.library import LinearAmplitudeFunctionGate
 from qiskit.circuit.library import LinearAmplitudeFunction
-from qiskit_aer.primitives import Sampler
-from qiskit_aer.primitives import SamplerV2
-from qiskit.primitives import StatevectorSampler
 from qiskit_finance.circuit.library import LogNormalDistribution
 from qiskit import ClassicalRegister
+from qiskit_aer.primitives import Sampler
+# from qiskit_aer.primitives import SamplerV2
+from qiskit.primitives import StatevectorSampler
 
+# sampler = Sampler(
+#     backend_options={"method": "statevector"},
+#     run_options={"shots": 1000, "seed_simulator": 75}
+# )
+
+sampler = StatevectorSampler()
+
+## qiskit2.0의 runtime 
+## transpile이 필요하다. 라이브러리 내부에서 transpile을 수행하지 않는 듯.
+#
+# # from qiskit_ibm_runtime import SamplerV2
+# from qiskit_ibm_runtime.fake_provider import FakeManilaV2
+# backend = FakeManilaV2()
+# sampler = SamplerV2(backend)
 
 # number of qubits to represent the uncertainty
-num_uncertainty_qubits = 8  # original 3, max=8
+num_uncertainty_qubits = 3  # original 3, max=8
 
 # parameters for considered random distribution
 S = 2.0  # initial spot price
@@ -132,14 +146,6 @@ epsilon = 0.01
 alpha = 0.05
 
 
-# sampler = Sampler(
-#     backend_options={"method": "statevector"},
-#     run_options={"shots": 1000, "seed_simulator": 75}
-# )
-
-sampler = StatevectorSampler()
-
-
 problem = EstimationProblem(
     state_preparation=european_call,  
     objective_qubits=[3],
@@ -150,8 +156,6 @@ problem = EstimationProblem(
 ae = IterativeAmplitudeEstimation(
     epsilon_target=epsilon, alpha=alpha, sampler=sampler
 )
-
-
 
 result = ae.estimate(problem)
 
@@ -174,7 +178,7 @@ european_call_pricing = EuropeanCallPricing(
 # set target precision and confidence level
 epsilon = 0.01
 alpha = 0.05
-sampler = StatevectorSampler()
+# sampler = StatevectorSampler()
 
 problem = european_call_pricing.to_estimation_problem()
 # construct amplitude estimation
@@ -214,7 +218,7 @@ european_call_delta_circ.append(
 # set target precision and confidence level
 epsilon = 0.01
 alpha = 0.05
-sampler = StatevectorSampler()
+# sampler = StatevectorSampler()
 
 problem = european_call_delta.to_estimation_problem()
 
