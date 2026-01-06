@@ -4,12 +4,14 @@
 
 from qrisp import *
 
+
 def fake_inversion(qf, res=None):
     if res is None:
         res = QuantumFloat(qf.size + 1)
     for i in jrange(qf.size):
         cx(qf[i], res[qf.size - i])
     return res
+
 
 @RUS(static_argnums=[0, 1])
 def HHL_encoding(b, hamiltonian_evolution, n, precision):
@@ -31,6 +33,7 @@ def HHL_encoding(b, hamiltonian_evolution, n, precision):
     # The first return value is a boolean.
     # Additional return values are QuantumVariables.
     return cancellation_bool, qf, qpe_res, inv_res
+
 
 def HHL(b, hamiltonian_evolution, n, precision):
     qf, qpe_res, inv_res = HHL_encoding(b, hamiltonian_evolution, n, precision)
