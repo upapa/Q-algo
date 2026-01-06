@@ -107,10 +107,8 @@ print(b)
 
 @terminal_sampling
 def main():
-
     x = HHL(tuple(b), U, n, 4)
     return x
-
 
 res_dict = main()
 

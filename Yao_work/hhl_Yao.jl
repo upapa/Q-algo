@@ -23,7 +23,7 @@ struct HHLCRot{NC, T} <: PrimitiveBlock{2}
 end
 Yao.nqudits(cr::HHLCRot) = cr.n
 
-@inline function hhlrotmat(λ::Real, C_value::Real)
+@inline function hhlrotmat(λ::Real, C_value::Real) 
     b = C_value/λ
     a = sqrt(1-b^2)
     a, -b, b, a
@@ -63,7 +63,12 @@ function hhlcircuit(UG, n_reg::Int, C_value::Real)
     n_all = 1 + n_reg + n_b
     pe = phase_estimation_circuit(UG, n_reg, n_b)
     cr = HHLCRot(n_reg+1, [2:n_reg+1...], 1, C_value)
-    chain(n_all, subroutine(n_all, pe, [2:n_all...,]), subroutine(n_all, cr, [1:(n_reg+1)...,]), subroutine(n_all, pe', [2:n_all...,]))
+    chain(
+         n_all
+        ,subroutine(n_all, pe, [2:n_all...,])
+        ,subroutine(n_all, cr, [1:(n_reg+1)...,])
+        ,subroutine(n_all, pe', [2:n_all...,])
+        )
 end
 
 """
